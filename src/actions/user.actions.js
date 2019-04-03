@@ -1,4 +1,5 @@
-import { userService } from "../utils/services";
+import { userService } from "../services/services";
+import { actionsConstant } from "../Constants/user.Constant";
 export const userActions = {
   login,
   logout,
@@ -7,20 +8,51 @@ export const userActions = {
 
 function login(email, password) {
   return dispatch => {
-    dispatch({type: 'LOGIN_REQUEST',email});
-   userService.login(email, password).then(
-     user => {
-       dispatch({type: 'LOGIN_SUCCESS',user})
-     },
-     error => {dispatch({type: 'LOGIN_FAILURE',error})}
-   )
-  } 
-  
+    dispatch(request(email));
+    userService.login(email, password).then(
+      user => {
+        dispatch(seccess(user));
+      },
+      error => {
+        dispatch(failur(error));
+      }
+    );
+  };
+  function request(email) {
+    return { type: actionsConstant.LOGIN_REQUEST, email };
+  }
+  function seccess(user) {
+    return { type: actionsConstant.LOGIN_SUCCESS, user };
+  }
+  function failur(error) {
+    return { type: actionsConstant.LOGIN_FAILURE, error };
+  }
 }
 
-function logout(email, password) {
+function logout() {
   userService.logout();
-  return { type: "LOGOUT" };
+  return { type: actionsConstant.LOGOUT };
 }
 
-function register(username, password) {}
+function register(user) {
+  return dispatch => {
+    dispatch(request(user.email));
+    userService.register(user).then(
+      user => {
+        dispatch(seccess(user));
+      },
+      error => {
+        dispatch(failur(error));
+      }
+    );
+  };
+  function request(email) {
+    return { type: actionsConstant.REGISTER_REQUEST, email };
+  }
+  function seccess(user) {
+    return { type: actionsConstant.REGISTER_SUCCESS, user };
+  }
+  function failur(error) {
+    return { type: actionsConstant.REGISTER_FAILURE, error };
+  }
+}

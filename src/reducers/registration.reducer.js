@@ -1,13 +1,16 @@
+import { actionsConstant } from "../Constants/user.Constant";
 
 export function registration(state = {}, action) {
-    switch (action.type) {
-      case 'REGISTER_REQUEST':
-        return { registering: true };
-      case 'REGISTER_SUCCESS':
-        return {};
-      case 'REGISTER_FAILURE':
-        return {};
-      default:
-        return state
-    }
+  switch (action.type) {
+    case actionsConstant.REGISTER_REQUEST:
+      return { registering: true };
+    case actionsConstant.REGISTER_SUCCESS:
+      return {};
+    case actionsConstant.REGISTER_FAILURE:
+      return {
+        error: action.error
+      };
+    default:
+      return state;
   }
+}
