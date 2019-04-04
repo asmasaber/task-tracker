@@ -1,5 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import Link from '../custom/link'
+
 import { connect } from "react-redux";
 class NavBar extends React.Component {
   userHeaders = user => {
