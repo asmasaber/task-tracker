@@ -13,7 +13,7 @@ export default class Link extends React.Component{
               className={this.props.className}
               onClick={this.handleLinkClick}
             >
-            {this.props.children}
+                {this.props.children}
             </a>
         );
     }
