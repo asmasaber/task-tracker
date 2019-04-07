@@ -3,17 +3,26 @@ import React from "react";
 import Link from '../custom/link'
 
 import { connect } from "react-redux";
+import { userActions } from "../../actions/user";
+
 class NavBar extends React.Component {
-  userHeaders = user => {
+  logout = () => {
+    this.props.dispatch(userActions.logout());    
+  }
+
+  userHeaders = (user) => {
     return (
       <ul className="navbar-nav mr-auto">
         <li className="nav-item">
           <Link className="nav-link">{user.name}</Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to="/login">
+          <a href="/login"
+            className="nav-link" 
+            onClick={this.logout}
+          >
             Logout
-          </Link>
+          </a>
         </li>
       </ul>
     );
@@ -35,6 +44,7 @@ class NavBar extends React.Component {
       </ul>
     );
   };
+
   render() {
     const { loggedIn, user } = this.props;
     return (

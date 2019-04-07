@@ -1,6 +1,6 @@
 import React from "react";
 import {routes, defualtRout, authRout} from "../../routes";
-import {history} from "../../history"
+import {history} from "../../history";
 export class Router extends React.Component {
     constructor(props) {
         super(props);
@@ -9,11 +9,11 @@ export class Router extends React.Component {
         };
     }
 
-    componentDidMount= () => {
+    componentDidMount() {
         window.addEventListener("pushState", (e) => {
             this.setState(
                 {
-                  currentPath: window.location.pathname
+                    currentPath: window.location.pathname
                 });
         });
     }
@@ -23,31 +23,29 @@ export class Router extends React.Component {
             return route.path === this.state.currentPath;
         });
         if(route)
-            return this.checkRouteAuth(route)
+            return this.checkRouteAuth(route);
         else
-            return this.checkRouteAuth(defualtRout)
+            return this.checkRouteAuth(defualtRout);
     }
 
     checkRouteAuth (route) {
-
         if (route) {
             if(route.requiresAuth) {
-                if( localStorage.getItem('user'))
+                if( localStorage.getItem("user"))
                     return route.component;
                 else
                 {
-
-                    history.pushState(authRout.path)
-                    return authRout.component
+                    history.pushState(authRout.path);
+                    return authRout.component;
                 }
-             }
-             else {
-
-                 return route.component
-             }
+            }
+            else {
+                return route.component;
+            }
         }
         return null;
     }
+
     render() {
         return (
             <div>

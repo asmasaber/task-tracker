@@ -12,7 +12,6 @@ class Login extends React.Component {
       password: "",
       submitted: false
     };
-    this.props.dispatch(userActions.logout());
   }
 
   handleChange = e => {

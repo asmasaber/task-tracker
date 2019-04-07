@@ -30,6 +30,7 @@ function login(email, password) {
 }
 
 function logout() {
+    console.log('logot action')
     userService.logout();
     return { type: actionsConstant.LOGOUT };
 }

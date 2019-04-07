@@ -25,6 +25,8 @@ function login(email, password) {
 }
 
 function logout() {
+    console.log('logot service')
+
     localStorage.removeItem("user");
 }
 
