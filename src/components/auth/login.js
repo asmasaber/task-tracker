@@ -1,38 +1,50 @@
 import React from "react";
+import Form from "../forms"
 import { connect } from "react-redux";
 import { userActions } from "../../actions/user";
 import Link from '../custom/link'
-
-class Login extends React.Component {
+import { validators } from "../../services/validators"
+class Login extends Form{
   constructor(props) {
     super(props);
+    // this.state = {
+    //   email: "",
+    //   password: "",
+    //   submitted: false
+    // };
+  }
 
-    this.state = {
-      email: "",
-      password: "",
-      submitted: false
-    };
+  componentDidMount() {
+   this.initializeForm(); 
+
+  }
+  initializeForm = () => {
+    this.filed = ({name:"email", value: "", validators:[validators.Requied, validators.Email]});
+    this.filed = ({name:"password", value: "", validators:[validators.Requied]});
+    console.log(this.state.fileds)
   }
 
   handleChange = e => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    this.state.fileds.map(field => {
+      if(field.name === name)
+      field.value = value
+    })
   };
 
   handleSubmit = e => {
     e.preventDefault();
-
     this.setState({ submitted: true });
-    const { email, password } = this.state;
     const { dispatch } = this.props;
-    if (email && password) {
-      dispatch(userActions.login(email, password));
+    this.validateForm();
+    if (this.state.isFormValid) {
+      dispatch(userActions.login("email", "password"));      
     }
   };
   render() {
     const { loggingIn, error } = this.props;
-    const { email, password, submitted } = this.state;
-
+    const { password, submitted } = this.state;
+     const email = this.state.fileds? this.state.fileds.find(i => i.name == "email") : ""
     return (
       <div className="col-md-6 col-md-offset-3">
         <h2>Login</h2>
@@ -43,20 +55,21 @@ class Login extends React.Component {
         )}
         <form name="form" onSubmit={this.handleSubmit}>
           <div
-            className={"form-group" + (submitted && !email ? " has-error" : "")}
+            className={"form-group" + (submitted ? " has-error" : "")}
           >
             <label htmlFor="email">Email</label>
             <input
               type="email"
               className="form-control"
               name="email"
-              value={email}
+              // value={email}
               onChange={this.handleChange}
             />
-            {submitted && !email && (
-              <div className="help-block">Email is required</div>
-            )}
           </div>
+         { console.log('submitted', this.getfield("email"))}
+          {submitted && !this.getfield("email")[0].isValid && (
+              <div className="help-block">{this.getfield("email")[0].error}</div>
+            )}
           <div
             className={
               "form-group" + (submitted && !password ? " has-error" : "")
@@ -70,8 +83,8 @@ class Login extends React.Component {
               value={password}
               onChange={this.handleChange}
             />
-            {submitted && !password && (
-              <div className="help-block">Password is required</div>
+            {submitted && !this.getfield("password")[0].isValid && (
+              <div className="help-block">{this.getfield("password")[0].error}</div>
             )}
           </div>
           <div className="form-group">
