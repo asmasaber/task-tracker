@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import Link from '../custom/link'
 
 
-import { userActions } from "../../actions/user.actions";
-import { actionsConstant } from "../../Constants/user.Constant";
+import { userActions } from "../../actions/user";
+import { actionsConstant } from "../../Constants/user";
 
 class Signup extends React.Component {
   constructor(props) {

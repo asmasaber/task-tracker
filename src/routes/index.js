@@ -1,25 +1,33 @@
-import React from 'react'
-
-import { Login } from '../components/auth/login'
-import { Signup } from '../components/auth/signup'
-
-import Board  from '../components/taskBoard/board'
+import React from "react";
+import { Login } from "../components/auth/login";
+import { Signup } from "../components/auth/signup";
+import Board  from "../components/taskBoard/board";
 
 export  const routes = [
     {
-        path: '/login',
+        path: "/login",
+        requiresAuth: false,
         component: <Login />
     },
     {
-        path: '/signup',
+        path: "/signup",
+        requiresAuth: false,
         component: <Signup />
     },
     {
-        path: '/board',
+        path: "/board",
+        requiresAuth: true,
         component: <Board />
-    },
-    {
-        path: 'defualtPath',
-        component: <Board />
-    },
-]
+    }
+];
+
+export const defualtRout ={
+    path: "defualtPath",
+    requiresAuth: true,
+    component: <Board />
+};
+
+export const authRout ={
+    path: "/login",
+    component: <Login />
+};
