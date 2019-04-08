@@ -5,14 +5,6 @@ import { userActions } from "../../actions/user";
 import Link from '../custom/link'
 import { validators } from "../../services/validators"
 class Login extends Form{
-  constructor(props) {
-    super(props);
-    // this.state = {
-    //   email: "",
-    //   password: "",
-    //   submitted: false
-    // };
-  }
 
   componentDidMount() {
    this.initializeForm(); 
@@ -21,30 +13,36 @@ class Login extends Form{
   initializeForm = () => {
     this.filed = ({name:"email", value: "", validators:[validators.Requied, validators.Email]});
     this.filed = ({name:"password", value: "", validators:[validators.Requied]});
-    console.log(this.state.fileds)
   }
 
   handleChange = e => {
     const { name, value } = e.target;
     this.state.fileds.map(field => {
       if(field.name === name)
-      field.value = value
+        field.value = value
     })
   };
 
   handleSubmit = e => {
+   
     e.preventDefault();
-    this.setState({ submitted: true });
+    const email = this.getfield("email")
+    const password = this.getfield("password")
     const { dispatch } = this.props;
+
+    this.setState({ submitted: true });
+
     this.validateForm();
     if (this.state.isFormValid) {
-      dispatch(userActions.login("email", "password"));      
+      dispatch(userActions.login(email.value, password.value));      
     }
   };
   render() {
     const { loggingIn, error } = this.props;
-    const { password, submitted } = this.state;
-     const email = this.state.fileds? this.state.fileds.find(i => i.name == "email") : ""
+    const email = this.getfield("email")
+    const password = this.getfield("password")
+    const submitted = this.state.submitted
+
     return (
       <div className="col-md-6 col-md-offset-3">
         <h2>Login</h2>
@@ -53,26 +51,24 @@ class Login extends Form{
             {error}
           </div>
         )}
-        <form name="form" onSubmit={this.handleSubmit}>
+        <form name="form" onSubmit={this.handleSubmit} noValidate>
           <div
-            className={"form-group" + (submitted ? " has-error" : "")}
+            className={"form-group" + ((submitted && !email.isValid)? " has-error" : "")}
           >
             <label htmlFor="email">Email</label>
             <input
               type="email"
               className="form-control"
               name="email"
-              // value={email}
               onChange={this.handleChange}
             />
           </div>
-         { console.log('submitted', this.getfield("email"))}
-          {submitted && !this.getfield("email")[0].isValid && (
-              <div className="help-block">{this.getfield("email")[0].error}</div>
+          {submitted && !email.isValid && (
+              <div className="help-block">{email.error}</div>
             )}
           <div
             className={
-              "form-group" + (submitted && !password ? " has-error" : "")
+              "form-group" + (submitted && !password.isValid ? " has-error" : "")
             }
           >
             <label htmlFor="password">Password</label>
@@ -80,11 +76,10 @@ class Login extends Form{
               type="password"
               className="form-control"
               name="password"
-              value={password}
               onChange={this.handleChange}
             />
-            {submitted && !this.getfield("password")[0].isValid && (
-              <div className="help-block">{this.getfield("password")[0].error}</div>
+            {submitted && !password.isValid && (
+              <div className="help-block">{password.error}</div>
             )}
           </div>
           <div className="form-group">

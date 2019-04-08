@@ -1,37 +1,78 @@
 import React from "react";
+import Form from "../forms";
 import { connect } from "react-redux";
 import Link from '../custom/link'
+import { validators } from "../../services/validators"
 
 
 import { userActions } from "../../actions/user";
-import { actionsConstant } from "../../Constants/user";
 
-class Signup extends React.Component {
-  constructor(props) {
-    super(props);
+class Signup extends Form {
+  // constructor(props) {
+  //   super(props);
 
-    this.state = {
-      user: {
-        name: "",
-        email: "",
-        password: "",
-        repetPassword: "",
-        gender: "male"
-      },
-      submitted: false
-    };
-    this.props.dispatch({ type: actionsConstant.LOGOUT });
-  }
+  //   // this.state = {
+  //   //   user: {
+  //   //     name: "",
+  //   //     email: "",
+  //   //     password: "",
+  //   //     repetPassword: "",
+  //   //     gender: "male"
+  //   //   },
+  //   //   submitted: false
+  //   // };
+  // }
+
+  componentDidMount() {
+    this.initializeForm(); 
+ 
+   }
+   initializeForm = () => {
+     const form = {
+       name:{
+          value: "", 
+          isValid: false,
+          validators:[
+            {
+              type: validators.Requied
+            },
+            {
+              type: validators.Text
+            },
+            {
+              type: validators.MinLength,
+              restParm: [3]
+            },
+            {
+              type: validators.MaxLength,
+              restParm : [25]
+            }
+        ]}
+      };
+      this.setState({form: form})
+    //  this.filed = ({name:"email", value: "", validators:[validators.Requied, validators.Email]});
+    //  this.filed = ({name:"password", value: "", validators:[validators.Requied]});
+   }
+ 
 
   handleChange = e => {
     const { name, value } = e.target;
-    const { user } = this.state;
-    this.setState({
-      user: {
-        ...user,
-        [name]: value
-      }
-    });
+    // const { user } = this.state;
+    // this.setState({
+    //   user: {
+    //     ...user,
+    //     [name]: value
+    //   }
+    // });
+    this.state.fileds.map(field => {
+      console.log("on change")
+      console.log(field.name)
+      console.log(name)
+      if(field.name === name)
+        field.value = value
+
+    })
+    console.log(this.state)
   };
 
   handleOptionChange = e => {
@@ -41,17 +82,19 @@ class Signup extends React.Component {
   };
   handleSubmit = e => {
     e.preventDefault();
+    this.validateForm();
+    // const { dispatch } = this.props;
 
-    this.setState({ submitted: true });
-    const user = this.state.user;
-    const { dispatch } = this.props;
-    if (user.name && user.email && user.password && user.gender) {
-      dispatch(userActions.register(user));
-    }
+
+
+    // if (this.state.isFormValid) {
+    //   dispatch(userActions.register("user"));
+    // }
   };
   render() {
     const { registering, error } = this.props;
-    const { user, submitted } = this.state;
+    const submitted = this.state.submitted
+    const name = this.getfield("name")
 
     return (
       <div className="col-md-6 col-md-offset-3">
@@ -64,7 +107,7 @@ class Signup extends React.Component {
         <form name="form" onSubmit={this.handleSubmit}>
           <div
             className={
-              "form-group" + (submitted && !user.name ? " has-error" : "")
+              "form-group" + (submitted && !name ? " has-error" : "")
             }
           >
             <label htmlFor="name">Name</label>
@@ -72,16 +115,15 @@ class Signup extends React.Component {
               type="text"
               className="form-control"
               name="name"
-              value={user.name}
               onChange={this.handleChange}
             />
-            {submitted && !user.email && (
-              <div className="help-block">Name is required</div>
+            {submitted && (
+              <div className="help-block">{name.error}</div>
             )}
           </div>
           <div
             className={
-              "form-group" + (submitted && !user.email ? " has-error" : "")
+              "form-group" + (submitted  ? " has-error" : "")
             }
           >
             <label htmlFor="email">Email</label>
@@ -89,16 +131,15 @@ class Signup extends React.Component {
               type="email"
               className="form-control"
               name="email"
-              value={user.email}
               onChange={this.handleChange}
             />
-            {submitted && !user.email && (
+            {submitted && (
               <div className="help-block">Email is required</div>
             )}
           </div>
           <div
             className={
-              "form-group" + (submitted && !user.password ? " has-error" : "")
+              "form-group" + (submitted ? " has-error" : "")
             }
           >
             <label htmlFor="password">Password</label>
@@ -106,17 +147,16 @@ class Signup extends React.Component {
               type="password"
               className="form-control"
               name="password"
-              value={user.password}
               onChange={this.handleChange}
             />
-            {submitted && !user.password && (
+            {submitted  && (
               <div className="help-block">Password is required</div>
             )}
           </div>
           <div
             className={
               "form-group" +
-              (submitted && !user.repetPassword ? " has-error" : "")
+              (submitted ? " has-error" : "")
             }
           >
             <label htmlFor="password">Confirm Password</label>
@@ -124,10 +164,9 @@ class Signup extends React.Component {
               type="password"
               className="form-control"
               name="repetPassword"
-              value={user.repetPassword}
               onChange={this.handleChange}
             />
-            {submitted && !user.password && (
+            {submitted && (
               <div className="help-block">Repeat Password is required</div>
             )}
           </div>
@@ -135,14 +174,13 @@ class Signup extends React.Component {
           <div
             className={
               "form-group" +
-              (submitted && !user.repetPassword ? " has-error" : "")
+              (submitted? " has-error" : "")
             }
           >
             <label htmlFor="gender">Gender</label>
             <select
               className="form-control"
               name="gender"
-              value={this.state.gender}
               onChange={this.handleChange}
             >
               <option value="male">Male</option>

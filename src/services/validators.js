@@ -5,15 +5,18 @@ export const  Requied = (value) => {
 };
 
 export const  MinLength = (value, minLength) => {
-    return  value.length> minLength? true: false;
+    return  value.length> minLength? "": "Min. Length shouid be "+ minLength;
 };
 
 export const  MaxLength = (value, maxLength) => {
-    return  value.length< maxLength? true: false;
+    return  value.length< maxLength? "": "Min. Length shouid be "+ maxLength;
 };
 
+export const Text = (value) => {
+    return /[^0-9]/.test(value)? "": "value should not contain any number" ;
+}
 export const  Email = (value) => {
-    return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         .test(value) ? "" : "not Valid Email";
 };
 
@@ -23,10 +26,15 @@ export const  Password = (value) => {
 };
 
 
+export const  RepeatPassword = (value, Password) => {
+    return  value === Password? "": "repeat password not matched";
+};
+
 export const validators = {
     Requied,
     MinLength,
     MaxLength,
+    Text,
     Email,
     Password
 };
