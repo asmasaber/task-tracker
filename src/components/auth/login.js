@@ -11,37 +11,42 @@ class Login extends Form{
 
   }
   initializeForm = () => {
-    this.filed = ({name:"email", value: "", validators:[validators.Requied, validators.Email]});
-    this.filed = ({name:"password", value: "", validators:[validators.Requied]});
+    const form = {
+      email:{
+         value: "", 
+         isValid: false,
+         validators:[
+           {
+             type: validators.Requied
+           },
+           {
+             type: validators.Email
+           }
+       ]},
+       password:{
+        value: "", 
+        isValid: false,
+        validators:[
+          {
+            type: validators.Requied
+          }
+      ]},
+     };
+     this.setState({form: form})
   }
 
-  handleChange = e => {
-    const { name, value } = e.target;
-    this.state.fileds.map(field => {
-      if(field.name === name)
-        field.value = value
-    })
-  };
-
-  handleSubmit = e => {
-   
-    e.preventDefault();
-    const email = this.getfield("email")
-    const password = this.getfield("password")
+  login = () => {
     const { dispatch } = this.props;
+    dispatch(userActions.login(this.formValues));
+  }
 
-    this.setState({ submitted: true });
 
-    this.validateForm();
-    if (this.state.isFormValid) {
-      dispatch(userActions.login(email.value, password.value));      
-    }
-  };
+  
   render() {
     const { loggingIn, error } = this.props;
     const email = this.getfield("email")
     const password = this.getfield("password")
-    const submitted = this.state.submitted
+    const submitted = this.isFormSubmitted
 
     return (
       <div className="col-md-6 col-md-offset-3">
@@ -51,7 +56,7 @@ class Login extends Form{
             {error}
           </div>
         )}
-        <form name="form" onSubmit={this.handleSubmit} noValidate>
+        <form name="form" onSubmit={this.handleSubmit(this.login)} noValidate>
           <div
             className={"form-group" + ((submitted && !email.isValid)? " has-error" : "")}
           >

@@ -8,93 +8,96 @@ import { validators } from "../../services/validators"
 import { userActions } from "../../actions/user";
 
 class Signup extends Form {
-  // constructor(props) {
-  //   super(props);
-
-  //   // this.state = {
-  //   //   user: {
-  //   //     name: "",
-  //   //     email: "",
-  //   //     password: "",
-  //   //     repetPassword: "",
-  //   //     gender: "male"
-  //   //   },
-  //   //   submitted: false
-  //   // };
-  // }
 
   componentDidMount() {
     this.initializeForm(); 
- 
-   }
-   initializeForm = () => {
-     const form = {
-       name:{
-          value: "", 
-          isValid: false,
-          validators:[
-            {
-              type: validators.Requied
-            },
-            {
-              type: validators.Text
-            },
-            {
-              type: validators.MinLength,
-              restParm: [3]
-            },
-            {
-              type: validators.MaxLength,
-              restParm : [25]
-            }
-        ]}
-      };
-      this.setState({form: form})
-    //  this.filed = ({name:"email", value: "", validators:[validators.Requied, validators.Email]});
-    //  this.filed = ({name:"password", value: "", validators:[validators.Requied]});
-   }
- 
+  }
 
-  handleChange = e => {
-    const { name, value } = e.target;
-    // const { user } = this.state;
-    // this.setState({
-    //   user: {
-    //     ...user,
-    //     [name]: value
-    //   }
-    // });
-    this.state.fileds.map(field => {
-      console.log("on change")
-      console.log(field.name)
-      console.log(name)
-      if(field.name === name)
-        field.value = value
+  initializeForm = () => {
+    const form = {
+      name:{
+        value: "", 
+        isValid: false,
+        validators:[
+          {
+            type: validators.Requied
+          },
+          {
+            type: validators.Text
+          },
+          {
+            type: validators.MinLength,
+            restParm: [3]
+          },
+          {
+            type: validators.MaxLength,
+            restParm : [25]
+          }
+      ]},
+      email:{
+        value: "", 
+        isValid: false,
+        validators:[
+          {
+            type: validators.Requied
+          },
+          {
+            type: validators.Email
+          }
+      ]},
+      password:{
+        value: "", 
+        isValid: false,
+        validators:[
+          {
+            type: validators.Requied
+          },
+          {
+            type: validators.Password
+          }
+      ]},
+      repeatPassword:{
+        value: "", 
+        isValid: false,
+        validators:[
+          {
+            type: validators.Requied
+          },
+          {
+            type: validators.RepeatPassword,
+            restParm: []
+          }
+      ]},
+      gender:{
+        value: "", 
+        isValid: false,
+        validators:[]
+      },
+    };
+    this.setState({form: form})
+  }
 
-    })
-    console.log(this.state)
-  };
+  componentDidUpdate(prevProps, prevState) {
+    console.log(prevProps)
+    console.log(prevState)
+    let _form = {...this.state.form};
+    console.log(_form)
+    _form.repeatPassword.validators[1].restParm = [_form.password.value];
+    if(prevState.form.repeatPassword && (_form.repeatPassword.validators[1].restParm  !== prevState.form.repeatPassword.validators[1].restParm ))
+      this.setState({form: {..._form}})
+  }
+  signup = () => {
+    const { dispatch } = this.props;
+    dispatch(userActions.register(this.formValues));
+  }
 
-  handleOptionChange = e => {
-    this.setState({
-      selectedOption: e.target.value
-    });
-  };
-  handleSubmit = e => {
-    e.preventDefault();
-    this.validateForm();
-    // const { dispatch } = this.props;
-
-
-
-    // if (this.state.isFormValid) {
-    //   dispatch(userActions.register("user"));
-    // }
-  };
   render() {
     const { registering, error } = this.props;
-    const submitted = this.state.submitted
+    const submitted = this.isFormSubmitted
     const name = this.getfield("name")
+    const email = this.getfield("email")
+    const password = this.getfield("password")
+    const repeatPassword = this.getfield("repeatPassword")
 
     return (
       <div className="col-md-6 col-md-offset-3">
@@ -104,10 +107,10 @@ class Signup extends Form {
             {error}
           </div>
         )}
-        <form name="form" onSubmit={this.handleSubmit}>
+        <form name="form" onSubmit={this.handleSubmit(this.signup)} noValidate>
           <div
             className={
-              "form-group" + (submitted && !name ? " has-error" : "")
+              "form-group" + (submitted && !name.isValid ? " has-error" : "")
             }
           >
             <label htmlFor="name">Name</label>
@@ -117,13 +120,14 @@ class Signup extends Form {
               name="name"
               onChange={this.handleChange}
             />
-            {submitted && (
+            {submitted && !name.isValid && (
               <div className="help-block">{name.error}</div>
             )}
           </div>
+
           <div
             className={
-              "form-group" + (submitted  ? " has-error" : "")
+              "form-group" + (submitted && ! email.isValid ? " has-error" : "")
             }
           >
             <label htmlFor="email">Email</label>
@@ -133,13 +137,13 @@ class Signup extends Form {
               name="email"
               onChange={this.handleChange}
             />
-            {submitted && (
-              <div className="help-block">Email is required</div>
+            {submitted && !email.isValid && (
+              <div className="help-block">{email.error}</div>
             )}
           </div>
           <div
             className={
-              "form-group" + (submitted ? " has-error" : "")
+              "form-group" + (submitted && !password.isValid ? " has-error" : "")
             }
           >
             <label htmlFor="password">Password</label>
@@ -149,34 +153,29 @@ class Signup extends Form {
               name="password"
               onChange={this.handleChange}
             />
-            {submitted  && (
-              <div className="help-block">Password is required</div>
+            {submitted && !password.isValid && (
+              <div className="help-block">{password.error}</div>
             )}
           </div>
           <div
             className={
               "form-group" +
-              (submitted ? " has-error" : "")
+              (submitted && !repeatPassword.isValid ? " has-error" : "")
             }
           >
             <label htmlFor="password">Confirm Password</label>
             <input
               type="password"
               className="form-control"
-              name="repetPassword"
+              name="repeatPassword"
               onChange={this.handleChange}
             />
-            {submitted && (
-              <div className="help-block">Repeat Password is required</div>
+            {submitted && !repeatPassword.isValid && (
+              <div className="help-block">{repeatPassword.error}</div>
             )}
           </div>
 
-          <div
-            className={
-              "form-group" +
-              (submitted? " has-error" : "")
-            }
-          >
+          <div>
             <label htmlFor="gender">Gender</label>
             <select
               className="form-control"

@@ -6,7 +6,7 @@ export const userActions = {
     register
 };
 
-function login(email, password) {
+function login({email, password}) {
     return dispatch => {
         dispatch(request(email));
         userService.login(email, password).then(

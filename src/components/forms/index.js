@@ -10,55 +10,75 @@ class Form extends React.Component {
         };
     }
 
-    validateForm() {
-        console.log(this.state);
+    handleChange = e => {
+        const { name, value } = e.target;
+        let _form = Object.assign({}, this.state.form); //{ ...this.state.form}
+        _form[name].value = value;
+        this.setState({form: { ..._form}})
+    };
+   
+    handleSubmit = login => e => {
+        console.log("enter submit")
+        e.preventDefault();
+        this.setState({ submitted: true });
+        this.validateForm();
+        if(this.isFormValid)
+            login();
+    }
 
+    get isFormValid () {
+        return this.state.isFormValid;
+    }
+
+    get isFormSubmitted () {
+        return this.state.submitted;
+    }
+    get formValues () {
+        // const values = Object.values(this.state.form).map((fieldInfo) => {
+        //     return fieldInfo.value
+        // })
+        const values = {}
         const form = this.state.form
-        let _form = Object.assign({}, this.state.form) //{ ...this.state.form}
         for(let key in form)
         {
-            _form[key].isValid= true ;
-            // this.setState({ form: { ..._form}, isFormValid: true})
-            console.log(this.state);
-
+            values[key] =  form[key].value ;
         }
-            
-
-        // return this.state.form.forEach((value, field) => {
-        //     console.log("field");
-        //     console.log(field);
-        //     console.log(value);
-        //     field.isValid= true;
-        //     // this.setState({form: {}})
-        //     // this.setState({isFormValid: true});
-        //     console.log("this.state");
-        //     console.log(this.state);
-        //     console.log(this.state.form[field]);
-
-        //     // return field.validators.some(validator => {
-        //     //     console.log("validator");
-        //     //     console.log(validator);
-        //     //     console.log(validator.restParm);
-
-        //     //     let errorMessage = "";
-        //     //     validator.restParm ?
-        //     //         errorMessage= validator.type(field.value, ... validator.restParm)
-        //     //         : errorMessage = validator.type(field.value) ;
-        //     //     field.error = errorMessage;
-
-        //     //     if(errorMessage)
-        //     //     {
-        //     //         field.isValid = false;
-        //     //         this.setState({isFormValid: false});
-        //     //         return true;
-        //     //     }
-        //     // });
-        // });
+        return values;
     }
 
     getfield(fieldName) {
         return this.state.form[fieldName];
     }
+
+    getfieldValue (fielldName) {
+        return this.state.form[fielldName].value;
+    }
+
+    validateForm() {
+        const form = this.state.form;
+        let _form = Object.assign({}, this.state.form); //{ ...this.state.form}
+        this.setState({ isFormValid: true})
+        for(let key in form)
+        {
+            let field = _form[key];
+            field.isValid= true ;
+            this.setState({ form: _form});
+            field.validators.some(validator => {
+                let errorMessage = "";
+                validator.restParm ?
+                    errorMessage= validator.type(field.value, ... validator.restParm)
+                    : errorMessage = validator.type(field.value) ;
+                field.error = errorMessage;
+                if(errorMessage)
+                {
+                    field.isValid = false;
+                    this.setState({isFormValid: false});
+                    return true;
+                }
+            });
+        }
+    }
+
     render () {
         return (
             <div></div>
