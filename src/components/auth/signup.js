@@ -1,11 +1,11 @@
 import React from "react";
-import Form from "../forms";
+import Form from "../form";
 import { connect } from "react-redux";
-import Link from '../custom/link'
-import { validators } from "../../services/validators"
+import Link from '../navigation/link'
+import  * as validators  from "../../services/validation"
 
 
-import { userActions } from "../../actions/user";
+import { signup } from "../../actions/auth";
 
 class Signup extends Form {
 
@@ -20,17 +20,17 @@ class Signup extends Form {
         isValid: false,
         validators:[
           {
-            type: validators.Requied
+            type: validators.checkRequied
           },
           {
-            type: validators.Text
+            type: validators.checkText
           },
           {
-            type: validators.MinLength,
+            type: validators.checkMinLength(),
             restParm: [3]
           },
           {
-            type: validators.MaxLength,
+            type: validators.checkMaxLength,
             restParm : [25]
           }
       ]},
@@ -39,35 +39,22 @@ class Signup extends Form {
         isValid: false,
         validators:[
           {
-            type: validators.Requied
+            type: validators.checkRequied
           },
           {
-            type: validators.Email
+            type: validators.checkEmail
           }
       ]},
       password:{
         value: "", 
         isValid: false,
-        validators:[
-          {
-            type: validators.Requied
-          },
-          {
-            type: validators.Password
-          }
+        validators:[validators.checkRequied, validators.checkPassword
       ]},
       repeatPassword:{
         value: "", 
         isValid: false,
-        validators:[
-          {
-            type: validators.Requied
-          },
-          {
-            type: validators.RepeatPassword,
-            restParm: []
-          }
-      ]},
+        validators:[validators.checkRequied, validators.confirmPassword]
+      },
       gender:{
         value: "", 
         isValid: false,
@@ -88,7 +75,7 @@ class Signup extends Form {
   }
   signup = () => {
     const { dispatch } = this.props;
-    dispatch(userActions.register(this.formValues));
+    dispatch(signup(this.formValues));
   }
 
   render() {

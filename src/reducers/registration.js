@@ -1,4 +1,4 @@
-import { actionsConstant } from "../Constants/user";
+import { actionsConstant } from "../constants/user";
 
 export function registration(state = {}, action) {
     switch (action.type) {

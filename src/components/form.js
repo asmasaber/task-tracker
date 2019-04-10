@@ -55,28 +55,36 @@ class Form extends React.Component {
     }
 
     validateForm() {
+        // this.state.form.email.isValid = true;
         const form = this.state.form;
-        let _form = Object.assign({}, this.state.form); //{ ...this.state.form}
-        this.setState({ isFormValid: true})
-        for(let key in form)
-        {
-            let field = _form[key];
-            field.isValid= true ;
-            this.setState({ form: _form});
-            field.validators.some(validator => {
-                let errorMessage = "";
-                validator.restParm ?
-                    errorMessage= validator.type(field.value, ... validator.restParm)
-                    : errorMessage = validator.type(field.value) ;
-                field.error = errorMessage;
-                if(errorMessage)
-                {
-                    field.isValid = false;
-                    this.setState({isFormValid: false});
-                    return true;
-                }
-            });
-        }
+        let _form = { ...this.state.form}//Object.assign({}, this.state.form); //{ ...this.state.form}
+        _form.email.isValid = true;
+        console.log(_form, this.state.form)
+        // this.setState({ isFormValid: true})
+        // this.setState({ isFormValid: true}, () => {
+        //     for(let key in form)
+        // {
+        //     let field = _form[key];
+
+        //     setTimeout(() => {
+        //         field.isValid= true ;
+        //     }, 5000)
+        //     // this.setState({ form: _form});
+        //     // field.validators.some(validator => {
+        //     //     let errorMessage = "";
+        //     //     validator.restParm ?
+        //     //         errorMessage= validator.type(field.value, ... validator.restParm)
+        //     //         : errorMessage = validator.type(field.value) ;
+        //     //     field.error = errorMessage;
+        //     //     if(errorMessage)
+        //     //     {
+        //     //         field.isValid = false;
+        //     //         this.setState({isFormValid: false});
+        //     //         return true;
+        //     //     }
+        //     // });
+        // }
+        // })
     }
 
     render () {

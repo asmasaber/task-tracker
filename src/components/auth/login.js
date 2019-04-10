@@ -1,9 +1,9 @@
 import React from "react";
-import Form from "../forms"
+import Form from "../form"
 import { connect } from "react-redux";
-import { userActions } from "../../actions/user";
-import Link from '../custom/link'
-import { validators } from "../../services/validators"
+import { login } from "../../actions/auth";
+import Link from '../navigation/link'
+import { checkEmail, checkRequied } from "../../services/validation"
 class Login extends Form{
 
   componentDidMount() {
@@ -17,36 +17,31 @@ class Login extends Form{
          isValid: false,
          validators:[
            {
-             type: validators.Requied
+             type: checkRequied
            },
            {
-             type: validators.Email
+             type: checkEmail
            }
        ]},
        password:{
         value: "", 
         isValid: false,
-        validators:[
-          {
-            type: validators.Requied
-          }
-      ]},
+        validators:[checkRequied]
+    },
      };
      this.setState({form: form})
   }
 
   login = () => {
     const { dispatch } = this.props;
-    dispatch(userActions.login(this.formValues));
+    dispatch(login(this.formValues));
   }
 
-
-  
   render() {
     const { loggingIn, error } = this.props;
     const email = this.getfield("email")
     const password = this.getfield("password")
-    const submitted = this.isFormSubmitted
+    const submitted = this.isFormSubmitted;
 
     return (
       <div className="col-md-6 col-md-offset-3">

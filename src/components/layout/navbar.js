@@ -1,13 +1,13 @@
 import React from "react";
 // import { Link } from "react-router-dom";
-import Link from '../custom/link'
+import Link from '../navigation/link'
 
 import { connect } from "react-redux";
-import { userActions } from "../../actions/user";
+import { logout } from "../../actions/auth";
 
 class NavBar extends React.Component {
   logout = () => {
-    this.props.dispatch(userActions.logout());    
+    this.props.dispatch(logout());    
   }
 
   userHeaders = (user) => {

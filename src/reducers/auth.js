@@ -1,4 +1,4 @@
-import { actionsConstant } from "../Constants/user";
+import { actionsConstant } from "../constants/user";
 
 let user = JSON.parse(localStorage.getItem("user"));
 const initialState = user ? { loggedIn: true, user } : {};

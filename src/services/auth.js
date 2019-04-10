@@ -1,13 +1,7 @@
-import { userApi } from "../utils/api";
-import {history} from "../history";
+import { userApi } from "../helpers/api";
+import { history } from "../helpers/history";
 
-export const userService = {
-    login,
-    logout,
-    register
-};
-
-function login(email, password) {
+export function login(email, password) {
     return new Promise((resolve, reject) => {
         userApi
             .login(email, password)
@@ -24,11 +18,11 @@ function login(email, password) {
     });
 }
 
-function logout() {
+export function logout() {
     localStorage.removeItem("user");
 }
 
-function register(user) {
+export function register(user) {
     return new Promise((resolve, reject) => {
         userApi
             .register(user)
@@ -43,4 +37,9 @@ function register(user) {
                 reject(error);
             });
     });
+
+}
+
+export function checkAuth() {
+    return localStorage.getItem("user");
 }

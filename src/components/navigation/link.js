@@ -1,5 +1,5 @@
 import React from "react"; 
-import {history} from "../../history"
+import { history } from "../../helpers/history";
 
 export default class Link extends React.Component{
 
@@ -7,12 +7,13 @@ export default class Link extends React.Component{
         history.pushState(this.props.to)
     }
     render () {
+        const { className, children } = this.props
         return(
             <a 
-              className={this.props.className}
+              className={className}
               onClick={this.handleLinkClick}
             >
-                {this.props.children}
+                {children}
             </a>
         );
     }

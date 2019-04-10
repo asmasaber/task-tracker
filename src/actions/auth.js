@@ -1,12 +1,7 @@
-import { userService } from "../services/services";
-import { actionsConstant } from "../Constants/user";
-export const userActions = {
-    login,
-    logout,
-    register
-};
+import * as userService from "../services/auth";
+import { actionsConstant } from "../constants/user";
 
-function login({email, password}) {
+export function login({email, password}) {
     return dispatch => {
         dispatch(request(email));
         userService.login(email, password).then(
@@ -29,12 +24,12 @@ function login({email, password}) {
     }
 }
 
-function logout() {
+export function logout() {
     userService.logout();
     return { type: actionsConstant.LOGOUT };
 }
 
-function register(user) {
+export function signup(user) {
     return dispatch => {
         dispatch(request(user.email));
         userService.register(user).then(
