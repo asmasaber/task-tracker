@@ -1,5 +1,5 @@
 import * as userService from "../services/auth";
-import { actionsConstant } from "../constants/user";
+import { actionsConstant } from "../constants/actionTypes";
 
 export function login({email, password}) {
     return dispatch => {
@@ -24,10 +24,10 @@ export function login({email, password}) {
     }
 }
 
-export function logout() {
-    userService.logout();
-    return { type: actionsConstant.LOGOUT };
-}
+// export function logout() {
+//     userService.logout();
+//     return { type: actionsConstant.LOGOUT };
+// }
 
 export function signup(user) {
     return dispatch => {
