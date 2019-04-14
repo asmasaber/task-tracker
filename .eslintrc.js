@@ -39,6 +39,8 @@ module.exports = {
         "react/jsx-uses-react": "error",   
         "react/jsx-uses-vars":
         "error",
-        "no-console": "error"
+        "no-console": "error",
+        "indent": ["error", 2],
+        "comma-spacing": {"before": false, "after": true} 
     }
 };

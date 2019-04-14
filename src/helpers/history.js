@@ -1,13 +1,13 @@
 var pushStateEvent = new CustomEvent("pushState", {
-    detail: {
-        path: window.location.pathname
-    }
+  detail: {
+    path: window.location.pathname
+  }
 });
 export const history = {
-    pushState
+  pushState
 };
 function pushState(path)
 {
-    window.history.pushState(null, null,path);
-    window.dispatchEvent(pushStateEvent);
+  window.history.pushState(null, null,path);
+  window.dispatchEvent(pushStateEvent);
 }

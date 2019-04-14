@@ -24,5 +24,9 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint-plugin-react": "^7.12.4",
+    "g": "^2.0.1",
+    "lodash": "^4.17.11"
+  }
 }

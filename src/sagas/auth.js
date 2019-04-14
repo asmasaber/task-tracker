@@ -1,27 +1,72 @@
-// import { delay } from "redux-saga";
-import { takeLatest, put } from "redux-saga/effects";
-import { actionsConstant } from "../constants/actionTypes";
-
+import {takeLatest, put, call, all} from "redux-saga/effects";
+import {actions} from "../constants/actionTypes";
 import * as userService from "../services/auth";
+import {history} from "../helpers/history";
+import {saveUser} from "../services/localStorage";
 
-function* logoutAsync() {
-    // yield delay(4000);
-    yield userService.logout();
+function* login(action) {
+  try {
+    const {email, password} = action.payload;
+    const responseBody = yield call(userService.login, email, password);
+    if (typeof responseBody.token === "undefined") {
+      throw new Error("Unable to find JWT in response body");
+    }
+    // update local storage
+    saveUser({...action.payload});
+    yield put(
+      {
+        type: actions.LOGIN_SUCCESS,
+        payload: {
+          user: action.payload,
+          token: responseBody.token
+        }
+      }
+    );
+    // redirect 
+    history.pushState("/");
+  }
+  catch (e)
+  {
+    yield put(
+      {
+        type: actions.LOGIN_FAILURE,
+        error: e.message
+      }
+    );
+  }
 }
 
-function* loginAsync() {
-    yield put(actionsConstant.LOGIN_REQUEST);
-    const user = userService.login();
-    if(user)
-        yield put(actionsConstant.LOGIN_SUCCESS, user);
-    else
-        yield put(actionsConstant.LOGIN_FAILURE);
+function* signup(action) {
+  try {
+    const {name, email, password} = action.payload;
+    yield call(userService.signup, name, email, password);
+    yield put(
+      {
+        type: actions.REGISTER_SUCCESS
+      }
+    );
+    // redirect 
+    history.pushState("/login");
+  }
+  catch (e)
+  {
+    yield put(
+      {
+        type: actions.REGISTER_FAILURE,
+        error: e.message
+      }
+    );
+  }
 }
 
-export function* watchLogout() {
-    yield takeLatest(actionsConstant.LOGOUT, logoutAsync);
+function* logout() {
+  yield userService.logout();
 }
+export default function *watchAll() {
+  yield all([
+    yield takeLatest(actions.REGISTER_REQUEST, signup),
+    yield takeLatest(actions.LOGIN_REQUEST, login),
+    yield takeLatest(actions.LOGOUT, logout)
+  ]);
 
-export function* watchLogin() {
-    yield takeLatest(actionsConstant.LOGOUT, loginAsync);
 }
