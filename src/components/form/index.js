@@ -25,7 +25,7 @@ class Form extends React.Component {
     const validationState = this.validateForm();
     this.setState(
       {submitted: true, ...validationState},
-      () => this.isFormValid && this.props.dispatch({type: action, payload: {...this.formValues}})
+      () => this.isFormValid && action(this.formValues)  //this.props.dispatch({type: action, payload: {...this.formValues}})
     );
   };
 

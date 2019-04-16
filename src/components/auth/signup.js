@@ -3,7 +3,7 @@ import Form from "../form";
 import {connect} from "react-redux";
 import Link from "../navigation/link";
 import  * as validators  from "../../services/validation";
-import {actions} from "../../constants/actionTypes";
+import {signup} from "../../actions/auth";
 import FormState from "../form/FormState";
 
 class Signup extends Form {
@@ -48,6 +48,11 @@ class Signup extends Form {
     if(prevState.form.repeatPassword && (form.repeatPassword.validators[1]  !== prevState.form.repeatPassword.validators[1] ))
       this.setState({form: {...form}});
   }
+
+  signup = (e) => {
+    e.preventDefault(); 
+    this.handleSubmit(this.props.signup);
+  }
   
   render() {
     const {registering, error} = this.props;
@@ -62,7 +67,7 @@ class Signup extends Form {
             {error}
           </div>
         )}
-        <form name="form" onSubmit={(e) => {e.preventDefault(); this.handleSubmit(actions.REGISTER_REQUEST);}} noValidate>
+        <form name="form" onSubmit={this.signup} noValidate>
           <div
             className={
               "form-group" + (submitted && !name.isValid ? " has-error" : "")
@@ -166,5 +171,12 @@ function mapStateToProps(state) {
   };
 }
 
-const connectedSignup = connect(mapStateToProps)(Signup);
+function mapDispatchToProps(dispatch){
+  return {
+    signup: (values) => dispatch(signup(values))
+  }
+}
+
+
+const connectedSignup = connect(mapStateToProps, mapDispatchToProps)(Signup);
 export {connectedSignup as Signup};

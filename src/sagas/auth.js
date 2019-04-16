@@ -8,11 +8,11 @@ function* login(action) {
   try {
     const {email, password} = action.payload;
     const responseBody = yield call(userService.login, email, password);
-    if (typeof responseBody.token === "undefined") {
+    if (!responseBody.token) {
       throw new Error("Unable to find JWT in response body");
     }
     // update local storage
-    saveUser({...action.payload});
+    saveUser(action.payload);
     yield put(
       {
         type: actions.LOGIN_SUCCESS,
@@ -62,11 +62,11 @@ function* signup(action) {
 function* logout() {
   yield userService.logout();
 }
+
 export default function *watchAll() {
   yield all([
     yield takeLatest(actions.REGISTER_REQUEST, signup),
     yield takeLatest(actions.LOGIN_REQUEST, login),
     yield takeLatest(actions.LOGOUT, logout)
   ]);
-
 }

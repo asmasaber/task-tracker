@@ -8,7 +8,7 @@ export function authentication(state = initialState, action) {
   case actions.LOGIN_REQUEST:
     return {
       loggingIn: true,
-      user: action.payload.user
+      user: action.user
     };
   case actions.LOGIN_SUCCESS:
     return {

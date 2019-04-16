@@ -3,7 +3,7 @@ import Form from "../form";
 import {connect} from "react-redux";
 import Link from "../navigation/link";
 import {checkEmail, checkRequied} from "../../services/validation";
-import {actions} from "../../constants/actionTypes";
+import {login} from "../../actions/auth";
 
 class Login extends Form{
 
@@ -23,6 +23,11 @@ class Login extends Form{
     }); 
   }
 
+  login = (e) => {
+    e.preventDefault(); 
+    this.handleSubmit(this.props.login);
+  }
+
   render() {
     const {loggingIn, error} = this.props;
     const {email, password} = this.formFields;
@@ -36,7 +41,7 @@ class Login extends Form{
             {error}
           </div>
         )}
-        <form name="form" onSubmit={(e) => {e.preventDefault(); this.handleSubmit(actions.LOGIN_REQUEST);}} noValidate>
+        <form name="form" onSubmit={this.login} noValidate>
           <div
             className={"form-group" + ((submitted && !email.isValid)? " has-error" : "")}
           >
@@ -91,5 +96,12 @@ function mapStateToProps(state) {
   };
 }
 
-const connectedLogin = connect(mapStateToProps)(Login);
+
+function mapDispatchToProps(dispatch){
+  return {
+    login: (values) => dispatch(login(values))
+  }
+}
+
+const connectedLogin = connect(mapStateToProps, mapDispatchToProps)(Login);
 export {connectedLogin as Login};
