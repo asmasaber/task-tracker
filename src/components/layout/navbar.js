@@ -2,11 +2,11 @@ import React from "react";
 import Link from "../navigation/link";
 
 import {connect} from "react-redux";
-import {actions} from "../../constants/actionTypes";
+import {authActions} from "../../constants/actionTypes";
 
 class NavBar extends React.Component {
   logout = () => {
-    this.props.dispatch({type: actions.LOGOUT});    
+    this.props.dispatch({type: authActions.LOGOUT});    
   }
 
   userHeaders = (user) => {

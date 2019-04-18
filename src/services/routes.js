@@ -1,7 +1,7 @@
 import React from "react";
 import {Login} from "../components/auth/login";
 import {Signup} from "../components/auth/signup";
-import Board  from "../components/taskBoard/board";
+import {TaskBoard}  from "../components/taskBoard/board";
 
 export  const routes = [
   {
@@ -17,14 +17,14 @@ export  const routes = [
   {
     path: "/board",
     requiresAuth: true,
-    component: <Board />
+    component: <TaskBoard />
   }
 ];
 
 export const defualtRout ={
   path: "defualtPath",
   requiresAuth: true,
-  component: <Board />
+  component: <TaskBoard />
 };
 
 export const authRout ={

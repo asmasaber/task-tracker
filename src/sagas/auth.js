@@ -1,8 +1,8 @@
-import {takeLatest, put, call, all} from "redux-saga/effects";
-import {actions} from "../constants/actionTypes";
-import * as userService from "../services/auth";
+import {takeLatest, put, call} from "redux-saga/effects";
+import {authActions} from "../constants/actionTypes";
+import * as userService from "../services/api";
 import {history} from "../helpers/history";
-import {saveUser} from "../services/localStorage";
+import {saveUser, removeUser} from "../services/localStorage";
 
 function* login(action) {
   try {
@@ -12,10 +12,10 @@ function* login(action) {
       throw new Error("Unable to find JWT in response body");
     }
     // update local storage
-    saveUser(action.payload);
+    saveUser({...action.payload, token: responseBody.token});
     yield put(
       {
-        type: actions.LOGIN_SUCCESS,
+        type: authActions.LOGIN_SUCCESS,
         payload: {
           user: action.payload,
           token: responseBody.token
@@ -29,7 +29,7 @@ function* login(action) {
   {
     yield put(
       {
-        type: actions.LOGIN_FAILURE,
+        type: authActions.LOGIN_FAILURE,
         error: e.message
       }
     );
@@ -42,7 +42,7 @@ function* signup(action) {
     yield call(userService.signup, {name, email, password});
     yield put(
       {
-        type: actions.REGISTER_SUCCESS
+        type: authActions.REGISTER_SUCCESS
       }
     );
     // redirect 
@@ -52,7 +52,7 @@ function* signup(action) {
   {
     yield put(
       {
-        type: actions.REGISTER_FAILURE,
+        type: authActions.REGISTER_FAILURE,
         error: e.message
       }
     );
@@ -60,13 +60,12 @@ function* signup(action) {
 }
 
 function* logout() {
-  yield userService.logout();
+  yield removeUser();
 }
 
-export default function *watchAll() {
-  yield all([
-    yield takeLatest(actions.REGISTER_REQUEST, signup),
-    yield takeLatest(actions.LOGIN_REQUEST, login),
-    yield takeLatest(actions.LOGOUT, logout)
-  ]);
-}
+export const authSagas =[
+  takeLatest(authActions.REGISTER_REQUEST, signup),
+  takeLatest(authActions.LOGIN_REQUEST, login),
+  takeLatest(authActions.LOGOUT, logout)
+];
+

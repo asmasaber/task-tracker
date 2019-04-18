@@ -1,7 +1,7 @@
 import {createStore, applyMiddleware} from "redux";
 import rootReducer from "../reducers";
 import createSagaMiddleware from "redux-saga";
-import watchAll from "../sagas/auth";
+import rootSaga from "../sagas";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -10,4 +10,4 @@ export const store = createStore(
   applyMiddleware(sagaMiddleware)
 );
 
-sagaMiddleware.run(watchAll);
+sagaMiddleware.run(rootSaga);

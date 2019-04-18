@@ -1,12 +1,12 @@
-import {actions} from "../constants/actionTypes";
+import {authActions} from "../constants/actionTypes";
 
 export function registration(state = {}, action) {
   switch (action.type) {
-  case actions.REGISTER_REQUEST:
+  case authActions.REGISTER_REQUEST:
     return {registering: true};
-  case actions.REGISTER_SUCCESS:
+  case authActions.REGISTER_SUCCESS:
     return {};
-  case actions.REGISTER_FAILURE:
+  case authActions.REGISTER_FAILURE:
     return {
       error: action.error
     };

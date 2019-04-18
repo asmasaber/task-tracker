@@ -1,8 +1,9 @@
 import React from "react";
+import {connect} from "react-redux";
 import {routes, defualtRout, authRout} from "../../services/routes";
 import {history} from "../../helpers/history";
-import {checkAuth} from "../../services/auth";
-export class Router extends React.Component {
+
+class Router extends React.Component {
 
   constructor(props) {
     super(props);
@@ -24,7 +25,7 @@ export class Router extends React.Component {
 
   checkRouteAuth(route) {
     if (route) 
-      if(route.requiresAuth && !checkAuth())
+      if(route.requiresAuth && !this.props.loggedIn)
         return this.redirectTo(authRout);
       else
         return route.component;
@@ -45,3 +46,14 @@ export class Router extends React.Component {
     );
   }
 }
+
+
+function mapStateToProps(state) {
+  const {loggedIn} = state.authentication;
+  return {
+    loggedIn
+  };
+}
+
+const connectedRouter = connect(mapStateToProps)(Router);
+export {connectedRouter as Router};

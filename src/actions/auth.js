@@ -1,15 +1,15 @@
-import {actions} from "../constants/actionTypes";
+import {authActions} from "../constants/actionTypes";
 
 export function login(formValues) {
     return {
-      type: actions.LOGIN_REQUEST,
+      type: authActions.LOGIN_REQUEST,
       payload: formValues
     }
 };
   
 export function signup(formValues) {
     return {
-      type: actions.REGISTER_REQUEST,
+      type: authActions.REGISTER_REQUEST,
       payload: formValues
     }
 };
