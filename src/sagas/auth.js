@@ -7,7 +7,7 @@ import {saveUser} from "../services/localStorage";
 function* login(action) {
   try {
     const {email, password} = action.payload;
-    const responseBody = yield call(userService.login, email, password);
+    const responseBody = yield call(userService.login, {email, password});
     if (!responseBody.token) {
       throw new Error("Unable to find JWT in response body");
     }
@@ -39,7 +39,7 @@ function* login(action) {
 function* signup(action) {
   try {
     const {name, email, password} = action.payload;
-    yield call(userService.signup, name, email, password);
+    yield call(userService.signup, {name, email, password});
     yield put(
       {
         type: actions.REGISTER_SUCCESS

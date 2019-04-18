@@ -1,4 +1,5 @@
 import {actions} from "../constants/actionTypes";
+
 export function login(formValues) {
     return {
       type: actions.LOGIN_REQUEST,
@@ -12,4 +13,3 @@ export function signup(formValues) {
       payload: formValues
     }
 };
-  
