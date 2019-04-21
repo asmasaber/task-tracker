@@ -1,34 +1,14 @@
 import React from "react";
-import {connect} from "react-redux";
-import {getTasks} from "../../actions/task"
-import {CreateTask} from "./create"
+import {CreateTask} from "./create";
+import {TaskList} from "./taskList";
 
-class TaskBoard extends React.Component {
-  componentDidMount() {
-    //get tasks
-    this.props.getTasks();
-  }
+export default class TaskBoard extends React.Component {
   render() {
-    return <div>
-      <CreateTask />
-    </div>;
+    return (
+      <div>
+        <TaskList />
+        <CreateTask />
+      </div>
+    );
   }
 }
-
-function mapStateToProps(state) {
-  const {loadingTask, tasks, error} = state.task;
-  return {
-    loadingTask,
-    tasks,
-    error
-  };
-}
-
-function mapDispatchToProps(dispatch){
-  return {
-    getTasks: () => dispatch(getTasks())
-  }
-}
-
-const connectedTaskBoard = connect(mapStateToProps, mapDispatchToProps)(TaskBoard);
-export {connectedTaskBoard as TaskBoard};

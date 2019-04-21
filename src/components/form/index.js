@@ -22,7 +22,6 @@ class Form extends React.Component {
   };
 
   handleSubmit = action => {
-    console.log("action >> ", action)
     const validationState = this.validateForm();
     this.setState(
       {submitted: true, ...validationState},

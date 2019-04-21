@@ -1,30 +1,32 @@
-import {BASE_URL} from "../constants/api";
-import {loadUser} from "../services/localStorage";
+import { BASE_URL } from "../constants/api";
+import { loadUser } from "../services/localStorage";
 
-const token = loadUser().token;
+const headers = () => {
+  const user = loadUser();
+  return {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: user ? `Bearer ${user.token}` : ""
+    }
+  };
+};
 
-const headers = {
-  "Content-Type": "application/json",
-  "Authorization": `Bearer ${token}`
- }
-
-async function request (method, endpoint, requestBody, ...rest) {
+const request = async (method, endpoint, requestBody, ...rest) => {
   const response = await window.fetch(`${BASE_URL}${endpoint}`, {
-    headers,
+    ...headers(),
     method,
     body: JSON.stringify(requestBody),
     ...rest
   });
 
-  if (response.status === 200) 
-    return await response.json();
-  else
-    throw new Error(response.statusText);
-}
+  if (response.status === 200 ) return await response.json();
+  if (response.status === 204 ) return true; // has no content 
+  else throw new Error(response.statusText);
+};
 
 export const api = {
   get: (...rest) => request("GET", ...rest),
   post: (...rest) => request("POST", ...rest),
   put: (...rest) => request("PUT", ...rest),
-  delete: (...rest) => request("DELETE", ...rest),
-}
+  delete: (...rest) => request("DELETE", ...rest)
+};
