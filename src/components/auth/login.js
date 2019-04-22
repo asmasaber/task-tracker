@@ -100,7 +100,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch){
   return {
     login: (values) => dispatch(login(values))
-  }
+  };
 }
 
 const connectedLogin = connect(mapStateToProps, mapDispatchToProps)(Login);

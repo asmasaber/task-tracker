@@ -1,29 +1,18 @@
 import {takeLatest, put, call} from "redux-saga/effects";
-import {taskActions} from "../constants/actionTypes";
+import {actions, types} from "../reducers/task";
 import * as api from "../services/api";
 
 
-function* getTasks(action) {
+function* getTasks() {
   try {
     const responseBody = yield call(api.getTasks);
     if(responseBody) {
-      yield put(
-        {
-          type: taskActions.USER_TASKS_SUCCESS,
-          payload: {
-            tasks: responseBody
-          }
-        });
+      yield put(actions.userTasksSuccess(responseBody));
     }
   }
   catch (e)
   {
-    yield put(
-      {
-        type: taskActions.USER_TASKS_FAILURE,
-        error: e.message
-      }
-    );
+    yield put(actions.userTasksFailure(e.message));
   }
 }
 
@@ -33,24 +22,13 @@ function* create(action) {
 
     const responseBody = yield call(api.createTask, action.payload.task);
     if(responseBody) {
-      yield put(
-        {
-          type: taskActions.CREATE_TASKS_SUCCESS,
-          payload: {
-            createdTask: responseBody
-          }
-        });
-        yield put({type: taskActions.USER_TASKS_REQUEST});
+      yield put(actions.createTaskSuccess(responseBody));
+      yield put(actions.userTasksRequest());
     }
   }
   catch (e)
   {
-    yield put(
-      {
-        type: taskActions.CREATE_TASKS_FAILURE,
-        error: e.message
-      }
-    );
+    yield put(actions.createTaskFailure(e.message));
   }
 }
 
@@ -59,59 +37,47 @@ function* update(action) {
 
     const responseBody = yield call(api.updateTask, action.payload.task);
     if(responseBody) {
-      yield put(
-        {
-          type: taskActions.UPDATE_TASKS_SUCCESS,
-          payload: {
-            updatedTask: responseBody
-          }
-        });
-        yield put({type: taskActions.USER_TASKS_REQUEST});
+      yield put(actions.updateTaskSuccess(responseBody));
+      yield put(actions.userTasksRequest());
     }
   }
   catch (e)
   {
-    yield put(
-      {
-        type: taskActions.UPDATE_TASKS_FAILURE,
-        error: e.message
-      }
-    );
+    yield put(actions.updateTaskFailure(e.message));
   }
 }
 
 function* remove(action) {
   try {
-    console.log("remove saga")
-    console.log("response body >>")
-
-    const responseBody = yield call(api.deleteTask, action.payload.task);
-    console.log("response body >>", responseBody)
+    const responseBody = yield call(api.deleteTask, action.payload.activeTask);
     if(responseBody) {
-      console.log("check response body")
-        yield put(
-          {
-            type: taskActions.DELETE_TASKS_SUCCESS,
-            payload: {
-              deleteTask: responseBody
-            }
-          });
-          yield put({type: taskActions.USER_TASKS_REQUEST});
+      yield put(actions.removeTaskSuccess());
+      yield put(actions.userTasksRequest());
     }
   }
   catch (e)
   {
-    yield put(
-      {
-        type: taskActions.DELETE_TASKS_FAILURE,
-        error: e.message
-      }
-    );
+    yield put(actions.removeTaskFailure(e.message));
   }
 }
+
+function* search(action) {
+  try {
+    const responseBody = yield call(api.search, action.payload.searchKey, action.payload.searchInComplated);
+    if(responseBody) {
+      yield put(actions.searchTaskSuccess(responseBody));
+    }
+  }
+  catch (e)
+  {
+    yield put(actions.searchTaskFailure(e.message));
+  }
+}
+
 export const taskSAgas = [
-  takeLatest(taskActions.USER_TASKS_REQUEST, getTasks),
-  takeLatest(taskActions.CREATE_TASK_REQUEST, create),
-  takeLatest(taskActions.UPDATE_TASK_REQUEST, update),
-  takeLatest(taskActions.DELETE_TASK_REQUEST, remove),
+  takeLatest(types.USER_TASKS_REQUEST, getTasks),
+  takeLatest(types.CREATE_TASK_REQUEST, create),
+  takeLatest(types.UPDATE_TASK_REQUEST, update),
+  takeLatest(types.DELETE_TASK_REQUEST, remove),
+  takeLatest(types.SEARCH_TASKS_REQUEST, search),
 ];

@@ -11,8 +11,10 @@ const headers = () => {
   };
 };
 
-const request = async (method, endpoint, requestBody, ...rest) => {
-  const response = await window.fetch(`${BASE_URL}${endpoint}`, {
+const request = async (method , {endPoint, params, requestBody} , ...rest) => {
+  let url = new URL(`${BASE_URL}${endPoint}`);
+  if(params) url.search = new URLSearchParams(params);
+  const response = await window.fetch(url, {
     ...headers(),
     method,
     body: JSON.stringify(requestBody),

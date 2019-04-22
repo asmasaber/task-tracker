@@ -1,26 +1,24 @@
 import React from "react";
-import {connect} from "react-redux";
-import {getTasks} from "../../actions/task";
-import {Task} from "./task";
+import Task from "./task";
 
-class TaskList extends React.Component {
+export default class TaskList extends React.Component {
 
   componentDidMount() {
     //load user tasks
-    this.props.getTasks();
+    this.props.userTasksRequest();
   }
   
   compaltedTasks = () => {
     if (this.props.tasks)
       return this.props.tasks.map(
-        task => !task.done && <Task key={task._id} task={task} />
+        task => !task.done && <Task key={task._id} task={task} {...this.props}/>
       );
   };
 
   unCompaltedTasks = () => {
     if (this.props.tasks)
       return this.props.tasks.map(
-        task => task.done && <Task key={task._id} task={task} />
+        task => task.done && <Task key={task._id} task={task} {...this.props}/>
       );
   };
   
@@ -65,23 +63,3 @@ class TaskList extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  const { loadingTask, tasks, error } = state.task;
-  return {
-    loadingTask,
-    tasks,
-    error
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    getTasks: () => dispatch(getTasks())
-  };
-}
-
-const connectedTaskList = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TaskList);
-export { connectedTaskList as TaskList };

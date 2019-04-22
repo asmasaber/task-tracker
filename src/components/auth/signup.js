@@ -174,7 +174,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch){
   return {
     signup: (values) => dispatch(signup(values))
-  }
+  };
 }
 
 

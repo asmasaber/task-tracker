@@ -1,11 +1,8 @@
 import React from "react";
-import { connect } from "react-redux";
-
 import Form from "../form";
-import { checkRequied, checkMinLength } from "../../services/validation";
-import { create } from "../../actions/task";
+import {checkRequied, checkMinLength} from "../../services/validation";
 
-class CreateTask extends Form {
+export default class CreateTask extends Form {
   componentDidMount() {
     this.initializeForm({
       title: {
@@ -19,7 +16,7 @@ class CreateTask extends Form {
 
   create = e => {
     e.preventDefault();
-    this.handleSubmit(this.props.create);
+    this.handleSubmit(this.props.createTaskRequest);
   };
 
   render() {
@@ -85,23 +82,3 @@ class CreateTask extends Form {
     );
   }
 }
-
-function mapStateToProps(state) {
-  const { creatingTask, error } = state.task;
-  return {
-    creatingTask,
-    error
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    create: values => dispatch(create(values))
-  };
-}
-
-const connectedCreateTask = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CreateTask);
-export { connectedCreateTask as CreateTask };
