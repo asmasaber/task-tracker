@@ -2,7 +2,7 @@ import React from "react";
 
 export default class Task extends React.Component {
   completeTask = task => {
-    this.props.update({ ...task, done: true });
+    this.props.updateTaskRequest({ ...task, done: true });
   };
   deleteTask = task => {
     this.props.removeTaskRequest(task);

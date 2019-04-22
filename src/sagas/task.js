@@ -53,6 +53,7 @@ function* remove(action) {
     if(responseBody) {
       yield put(actions.removeTaskSuccess());
       yield put(actions.userTasksRequest());
+      yield put(actions.searchTaskRequest());
     }
   }
   catch (e)

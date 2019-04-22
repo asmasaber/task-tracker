@@ -183,7 +183,7 @@ export const actions = {
 
   enableSearchMode: () => ({ type: types.ENABLE_SEARCH_MODE }),
   disableSearchMode: () => ({ type: types.DISABLE_SEARCH_MODE }),
-  
+
   searchTaskRequest: (searchKey, searchInComplated) => ({
     type: types.SEARCH_TASKS_REQUEST,
     payload: { searchKey, searchInComplated }

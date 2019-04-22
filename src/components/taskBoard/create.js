@@ -20,7 +20,7 @@ export default class CreateTask extends Form {
   };
 
   render() {
-    const { creatingTask, error } = this.props;
+    const { creatingTask } = this.props;
     const { title, details } = this.formFields;
     const submitted = this.isFormSubmitted;
 
@@ -28,11 +28,7 @@ export default class CreateTask extends Form {
       <div className="row justify-content-md-center">
         <div className="card bg-light col-md-9 mb-3">
           <div className="card-header">Create New Task</div>
-          {submitted && error && (
-            <div className="alert alert-danger" role="alert">
-              {error}
-            </div>
-          )}
+          
           <form name="form" onSubmit={this.create} noValidate>
             <div
               className={
