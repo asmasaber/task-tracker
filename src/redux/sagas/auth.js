@@ -1,8 +1,10 @@
 import {takeLatest, put, call} from "redux-saga/effects";
-import {authActions} from "../constants/actionTypes";
-import * as userService from "../services/api";
-import {history} from "../helpers/history";
-import {saveUser, removeUser} from "../services/localStorage";
+import * as userService from "../../services/api";
+import {history} from "../../helpers/history";
+import {saveUser, removeUser} from "../../services/localStorage";
+import {actions as authActions, types as authTypes} from "../actions/auth";
+import {actions as registrationActions, types as registrationTypes} from "../actions/registration";
+
 
 function* login(action) {
   try {
@@ -13,15 +15,10 @@ function* login(action) {
     }
     // update local storage
     saveUser({...action.payload, token: responseBody.token});
-    yield put(
-      {
-        type: authActions.LOGIN_SUCCESS,
-        payload: {
-          user: action.payload,
-          token: responseBody.token
-        }
-      }
-    );
+    yield put(authActions.loginSuccess({
+      user: action.payload,
+      token: responseBody.token
+    }));
     // redirect 
     history.pushState("/");
   }
@@ -40,11 +37,7 @@ function* signup(action) {
   try {
     const {name, email, password} = action.payload;
     yield call(userService.signup, {name, email, password});
-    yield put(
-      {
-        type: authActions.REGISTER_SUCCESS
-      }
-    );
+    yield put(registrationActions.signupSuccess());
     // redirect 
     history.pushState("/login");
   }
@@ -64,8 +57,8 @@ function* logout() {
 }
 
 export const authSagas =[
-  takeLatest(authActions.REGISTER_REQUEST, signup),
-  takeLatest(authActions.LOGIN_REQUEST, login),
-  takeLatest(authActions.LOGOUT, logout)
+  takeLatest(registrationTypes.REGISTER_REQUEST, signup),
+  takeLatest(authTypes.LOGIN_REQUEST, login),
+  takeLatest(authTypes.LOGOUT, logout)
 ];
 

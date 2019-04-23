@@ -1,10 +1,10 @@
 import {combineReducers} from "redux";
 
-import {authentication} from "./auth";
-import {registration} from "./registration";
+import auth from "./auth";
+import registration from "./registration";
 import task from "./task";
 const rootReducer = combineReducers({
-  authentication,
+  auth,
   registration,
   task
 });

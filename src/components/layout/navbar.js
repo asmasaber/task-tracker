@@ -1,12 +1,13 @@
 import React from "react";
+import {connect} from "react-redux";
+import { bindActionCreators } from "redux";
 import Link from "../navigation/link";
 
-import {connect} from "react-redux";
-import {authActions} from "../../constants/actionTypes";
+import { actions } from "../../redux/actions/auth";
 
 class NavBar extends React.Component {
   logout = () => {
-    this.props.dispatch({type: authActions.LOGOUT});    
+    this.props.logout();   
   }
 
   userHeaders = (user) => {
@@ -70,13 +71,18 @@ class NavBar extends React.Component {
     );
   }
 }
-function mapStateToProps(state) {
-  const {loggedIn, user} = state.authentication;
-  return {
-    loggedIn,
-    user
-  };
-}
 
-const connectedNavBar = connect(mapStateToProps)(NavBar);
-export {connectedNavBar as NavBar};
+
+const mapStateToProps = state => ({
+  loggedIn: state.auth.loggedIn,
+  user: state.auth.user
+});
+
+const mapDispatchToProps = dispatch => ({
+  ...bindActionCreators(actions, dispatch)
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NavBar);

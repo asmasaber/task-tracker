@@ -5,56 +5,49 @@ import Search from "./search";
 import CreateTask from "./create";
 import TaskList from "./taskList";
 import SearchResult from "./searchResult";
-import { actions } from "../../reducers/task";
+import { actions } from "../../redux/actions/task";
 
 class TaskBoard extends React.Component {
-
   boardContent = () => {
-    if(!this.props.searchMode) {
+    if (!this.props.searchMode) {
       return (
         <div>
-          <TaskList {...this.props}/>
-          <CreateTask {...this.props}/>
+          <TaskList {...this.props} />
+          <CreateTask {...this.props} />
         </div>
       );
     } else {
-      return <SearchResult {...this.props}/>;
+      return <SearchResult {...this.props} />;
     }
-    
-  }
+  };
   render() {
     return (
       <div>
-        <Search {...this.props}/>
+        <Search {...this.props} />
         {this.boardContent()}
       </div>
     );
   }
 }
 
-function mapStateToProps(state) {
-  const { searchMode,loadingfiltiredTasks, filtiredTasks ,  loadingTask,activeTask, tasks, creatingTask, deletingTask, updatingTask, error } = state.task;
-  return {
-    searchMode,
-    loadingfiltiredTasks,
-    filtiredTasks,
-    loadingTask,
-    tasks,
-    activeTask,
-    error,
-    creatingTask,
-    deletingTask,
-    updatingTask
-  };
-}
+const mapStateToProps = state => ({
+  searchMode: state.task.searchMode,
+  loadingfiltiredTasks: state.task.loadingfiltiredTasks,
+  filtiredTasks: state.task.filtiredTasks,
+  loadingTask: state.task.loadingTask,
+  tasks: state.task.tasks,
+  activeTask: state.task.activeTask,
+  error: state.task.error,
+  creatingTask: state.task.creatingTask,
+  deletingTask: state.task.deletingTask,
+  updatingTask: state.task.updatingTask
+});
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   ...bindActionCreators(actions, dispatch)
 });
 
-
-const connectedTaskBoard = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(TaskBoard);
-export { connectedTaskBoard as TaskBoard };

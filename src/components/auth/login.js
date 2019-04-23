@@ -1,9 +1,10 @@
 import React from "react";
+import { bindActionCreators } from "redux";
 import Form from "../form";
 import {connect} from "react-redux";
 import Link from "../navigation/link";
 import {checkEmail, checkRequied} from "../../services/validation";
-import {login} from "../../actions/auth";
+import { actions } from "../../redux/actions/auth";
 
 class Login extends Form{
 
@@ -25,7 +26,7 @@ class Login extends Form{
 
   login = (e) => {
     e.preventDefault(); 
-    this.handleSubmit(this.props.login);
+    this.handleSubmit(this.props.loginRequest);
   }
 
   render() {
@@ -88,20 +89,16 @@ class Login extends Form{
   }
 }
 
-function mapStateToProps(state) {
-  const {loggingIn, error} = state.authentication;
-  return {
-    loggingIn,
-    error
-  };
-}
+const mapStateToProps = state => ({
+  loggingIn: state.auth.loggingIn,
+  error: state.auth.error
+});
 
+const mapDispatchToProps = dispatch => ({
+  ...bindActionCreators(actions, dispatch)
+});
 
-function mapDispatchToProps(dispatch){
-  return {
-    login: (values) => dispatch(login(values))
-  };
-}
-
-const connectedLogin = connect(mapStateToProps, mapDispatchToProps)(Login);
-export {connectedLogin as Login};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);

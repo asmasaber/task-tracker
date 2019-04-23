@@ -1,9 +1,11 @@
 import React from "react";
+import {bindActionCreators} from "react";
 import Form from "../form";
 import {connect} from "react-redux";
 import Link from "../navigation/link";
 import  * as validators  from "../../services/validation";
-import {signup} from "../../actions/auth";
+import { actions } from "../../redux/actions/registration";
+
 import FormState from "../form/FormState";
 
 class Signup extends Form {
@@ -163,20 +165,16 @@ class Signup extends Form {
   }
 }
 
-function mapStateToProps(state) {
-  const {registering, error} = state.registration;
-  return {
-    registering,
-    error
-  };
-}
+const mapStateToProps= state => ({
+  registering: state.registration.registering,
+  error:  state.registration.error
+});
 
-function mapDispatchToProps(dispatch){
-  return {
-    signup: (values) => dispatch(signup(values))
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  ...bindActionCreators(actions, dispatch)
+});
 
-
-const connectedSignup = connect(mapStateToProps, mapDispatchToProps)(Signup);
-export {connectedSignup as Signup};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Signup);

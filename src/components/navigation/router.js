@@ -49,7 +49,7 @@ class Router extends React.Component {
 
 
 function mapStateToProps(state) {
-  const {loggedIn} = state.authentication;
+  const {loggedIn} = state.auth;
   return {
     loggedIn
   };

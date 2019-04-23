@@ -1,6 +1,6 @@
 import {takeLatest, put, call} from "redux-saga/effects";
-import {actions, types} from "../reducers/task";
-import * as api from "../services/api";
+import {actions, types} from "../actions/task";
+import * as api from "../../services/api";
 
 
 function* getTasks() {
