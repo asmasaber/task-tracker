@@ -46,10 +46,16 @@ const initialState = {
 };
 
 const handlers = {
-  [types.USER_TASKS_REQUEST]: state => ({...state, loadingTask: true}),
-  [types.USER_TASKS_SUCCESS]: (state, action) => ({...state,
+  [types.USER_TASKS_REQUEST]: state => ({
+    ...state, 
+    error: null,
+    loadingTask: true}),
+  [types.USER_TASKS_SUCCESS]: (state, action) => ({
+    ...state,
+    error: null,
     loadingTask: false,
-    tasks: action.payload.tasks}),
+    tasks: action.payload.tasks
+  }),
   [types.USER_TASKS_FAILURE]:  (state, action) => ({
     ...state,
     loadingTask: false,
@@ -57,10 +63,12 @@ const handlers = {
   }),
   [types.CREATE_TASK_REQUEST]: state => ({
     ...state,
+    error: null,
     creatingTask: true
   }),
   [types.CREATE_TASK_SUCCESS]: (state, action) => ({
     ...state,
+    error: null,
     creatingTask: false,
     createdTask: action.payload.createdTask
   }),
@@ -71,10 +79,12 @@ const handlers = {
   }),
   [types.UPDATE_TASK_REQUEST]: state => ({
     ...state,
+    error: null,
     updatingTask: true
   }),
   [types.UPDATE_TASK_SUCCESS]: (state, action) => ({
     ...state,
+    error: null,
     updatingTask: false,
     updatedTask: action.payload.updatedTask
   }),
@@ -85,11 +95,13 @@ const handlers = {
   }),
   [types.DELETE_TASK_REQUEST]:(state, action) => ({
     ...state,
+    error: null,
     activeTask: action.payload.activeTask,
     deletingTask: true
   }),
   [types.DELETE_TASK_SUCCESS]: state => ({
     ...state,
+    error: null,
     deletingTask: false
   }),
   [types.DELETE_TASK_FAILURE]: (state, action) => ({
@@ -107,12 +119,14 @@ const handlers = {
   }),
   [types.SEARCH_TASKS_REQUEST]: (state, action) => ({
     ...state,
+    error: null,
     loadingfiltiredTasks: true,
     searchKey: action.payload.searchKey,
     searchInComplated: action.payload.searchInComplated
   }),
   [types.SEARCH_TASKS_SUCCESS]: (state, action) => ({
     ...state,
+    error: null,
     loadingfiltiredTasks: false,
     filtiredTasks: action.payload.tasks
   }),

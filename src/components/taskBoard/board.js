@@ -21,8 +21,14 @@ class TaskBoard extends React.Component {
     }
   };
   render() {
+    const error = this.props.error;
     return (
       <div>
+        {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
         <Search {...this.props} />
         {this.boardContent()}
       </div>

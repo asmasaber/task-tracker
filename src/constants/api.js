@@ -1,1 +1,0 @@
-export const  BASE_URL = "http://www.garonz.com:3000";

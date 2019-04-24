@@ -47,13 +47,10 @@ class Router extends React.Component {
   }
 }
 
+const mapStateToProps = state => ({
+  loggedIn: state.auth.loggedIn
+});
 
-function mapStateToProps(state) {
-  const {loggedIn} = state.auth;
-  return {
-    loggedIn
-  };
-}
-
-const connectedRouter = connect(mapStateToProps)(Router);
-export {connectedRouter as Router};
+export default connect(
+  mapStateToProps
+)(Router);

@@ -1,7 +1,7 @@
 import React from "react";
 import FormState from "./FormState";
 
-class Form extends React.Component {
+export default class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -79,5 +79,3 @@ class Form extends React.Component {
     return {isFormValid, form: new FormState({...form})};
   }
 }
-
-export default Form;

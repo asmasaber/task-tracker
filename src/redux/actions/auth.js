@@ -18,6 +18,7 @@ const initialState = user
 const handlers = {
   [types.LOGIN_REQUEST]: state => ({
     ...state,
+    error: null,
     loggingIn: true
   }),
   [types.LOGIN_SUCCESS]: (state, action) => ({
@@ -28,6 +29,7 @@ const handlers = {
   }),
   [types.LOGIN_FAILURE]: (state, action) => ({
     ...state,
+    loggingIn: false,
     error: action.error
   }),
   [types.LOGOUT]: state => ({ ...state })
@@ -37,7 +39,8 @@ export default createReducer(initialState, handlers);
 
 export const actions = {
   loginRequest: makeActionCreator(types.LOGIN_REQUEST, "formValues"),
-  loginSuccess: makeActionCreator(types.LOGIN_SUCCESS),
-  loginFailure: makeActionCreator(types.LOGIN_FAILURE),
+  loginSuccess: makeActionCreator(types.LOGIN_SUCCESS, "user", "token"),
+  loginFailure: makeActionCreator(types.LOGIN_FAILURE, "error"),
+  logout: makeActionCreator(types.LOGOUT),
 };
 

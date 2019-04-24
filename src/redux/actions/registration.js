@@ -14,7 +14,8 @@ const initialState = {
 const handlers = {
   [types.REGISTER_REQUEST]: state => ({
     ...state,
-    registering: true 
+    registering: true,
+    error: null
   }),
   [types.REGISTER_SUCCESS]: state => ({
     ...state,
@@ -22,7 +23,8 @@ const handlers = {
   }),
   [types.REGISTER_FAILURE]:(state, action) => ({
     ...state,
-    error: action.error 
+    error: action.error,
+    registering: false
   })
 };
 
@@ -32,5 +34,5 @@ export default createReducer(initialState, handlers);
 export const actions = {
   signupRequest: makeActionCreator(types.REGISTER_REQUEST, "formValues"),
   signupSuccess: makeActionCreator(types.REGISTER_SUCCESS),
-  signupFailure: makeActionCreator(types.REGISTER_FAILURE),
+  signupFailure: makeActionCreator(types.REGISTER_FAILURE, "error"),
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import {Router} from "./navigation/router";
+import Router from "./navigation/router";
 import NavBar from "./layout/navbar";
 
 class App extends React.Component {

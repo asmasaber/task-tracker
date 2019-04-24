@@ -1,9 +1,9 @@
-import {takeLatest, put, call} from "redux-saga/effects";
-import {actions, types} from "../actions/task";
+import {put, call} from "redux-saga/effects";
+import {actions} from "../actions/task";
 import * as api from "../../services/api";
 
 
-function* getTasks() {
+export function* getTasks() {
   try {
     const responseBody = yield call(api.getTasks);
     if(responseBody) {
@@ -17,7 +17,7 @@ function* getTasks() {
 }
 
 
-function* create(action) {
+export function* create(action) {
   try {
 
     const responseBody = yield call(api.createTask, action.payload.task);
@@ -32,7 +32,7 @@ function* create(action) {
   }
 }
 
-function* update(action) {
+export function* update(action) {
   try {
 
     const responseBody = yield call(api.updateTask, action.payload.task);
@@ -46,8 +46,8 @@ function* update(action) {
     yield put(actions.updateTaskFailure(e.message));
   }
 }
-
-function* remove(action) {
+ 
+export function* remove(action) {
   try {
     const responseBody = yield call(api.deleteTask, action.payload.activeTask);
     if(responseBody) {
@@ -62,7 +62,7 @@ function* remove(action) {
   }
 }
 
-function* search(action) {
+export function* search(action) {
   try {
     const responseBody = yield call(api.search, action.payload.searchKey, action.payload.searchInComplated);
     if(responseBody) {
@@ -74,11 +74,3 @@ function* search(action) {
     yield put(actions.searchTaskFailure(e.message));
   }
 }
-
-export const taskSAgas = [
-  takeLatest(types.USER_TASKS_REQUEST, getTasks),
-  takeLatest(types.CREATE_TASK_REQUEST, create),
-  takeLatest(types.UPDATE_TASK_REQUEST, update),
-  takeLatest(types.DELETE_TASK_REQUEST, remove),
-  takeLatest(types.SEARCH_TASKS_REQUEST, search),
-];

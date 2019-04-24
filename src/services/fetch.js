@@ -1,5 +1,6 @@
-import { BASE_URL } from "../constants/api";
 import { loadUser } from "../services/localStorage";
+
+export const  BASE_URL = "http://www.garonz.com:3000";
 
 const headers = () => {
   const user = loadUser();

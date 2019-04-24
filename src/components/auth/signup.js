@@ -1,10 +1,11 @@
 import React from "react";
-import {bindActionCreators} from "react";
+import {bindActionCreators} from "redux";
 import Form from "../form";
 import {connect} from "react-redux";
 import Link from "../navigation/link";
 import  * as validators  from "../../services/validation";
 import { actions } from "../../redux/actions/registration";
+
 
 import FormState from "../form/FormState";
 
@@ -53,7 +54,7 @@ class Signup extends Form {
 
   signup = (e) => {
     e.preventDefault(); 
-    this.handleSubmit(this.props.signup);
+    this.handleSubmit(this.props.signupRequest);
   }
   
   render() {
